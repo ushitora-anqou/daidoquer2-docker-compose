@@ -1,0 +1,116 @@
+import Config
+
+config :logger, handle_sasl_reports: true
+
+config :nostrum,
+  token: System.fetch_env!("DISCORD_TOKEN"),
+  num_shards: :auto,
+  ffmpeg: System.get_env("FFMPEG_PATH", "/usr/bin/ffmpeg"),
+  youtubedl: System.get_env("YOUTUBEDL_PATH", "/usr/bin/youtube-dl"),
+  gateway_intents: [
+    :guilds,
+    # :guild_bans,
+    # :guild_emojis,
+    # :guild_integrations,
+    # :guild_webhooks,
+    # :guild_invites,
+    :guild_voice_states,
+    :guild_messages,
+    # :guild_message_reactions,
+    # :guild_message_typing,
+    # :direct_messages,
+    # :direct_message_reactions,
+    # :direct_message_typing,
+    # :guild_scheduled_events,
+    :message_content
+  ]
+
+config :daidoquer2,
+  announcer: {:voicevox_engine, "http://voicevox:50021", 2},
+  create_slash_command: fn c ->
+    Nostrum.Api.create_global_application_command(c)
+  end,
+  dummy_message: "ちくわ大明神。",
+  ffmpeg_path: System.get_env("FFMPEG_PATH", "/usr/bin/ffmpeg"),
+  ffmpeg_options1: [
+    "-re",
+    ["-i", "pipe:0"],
+    ["-ac", "2"],
+    ["-ar", "48000"],
+    ["-f", "s16le"],
+    ["-loglevel", "quiet"],
+    "pipe:1"
+  ],
+  ffmpeg_options2: [
+    "-re",
+    # ["-rtbufsize","1K"],
+    # ["-flags","low_delay"],
+    # ["-fflags","nobuffer"],
+    ["-probesize", "32"],
+    ["-analyzeduration", "0"],
+    ["-guess_layout_max", "0"],
+    ["-ac", "2"],
+    ["-ar", "48000"],
+    ["-f", "s16le"],
+    ["-i", "pipe:0"],
+    ["-ac", "2"],
+    ["-ar", "48000"],
+    ["-f", "s16le"],
+    # ["-compression_level","0"],
+    # ["-application","lowdelay"],
+    ["-acodec", "libopus"],
+    ["-loglevel", "quiet"],
+    "pipe:1"
+  ],
+  ffmpeg_options_direct: [
+    ["-i", "pipe:0"],
+    ["-ac", "2"],
+    ["-ar", "48000"],
+    ["-f", "s16le"],
+    ["-acodec", "libopus"],
+    ["-loglevel", "quiet"],
+    "pipe:1"
+  ],
+  low_voice_scale: 0.2,
+  message_length_limit: 100,
+  ms_before_join: 0,
+  ms_before_leave: 5 * 1000,
+  ms_before_stop_low_voice: 1 * 1000,
+  prompt_regex: ~r/^!ddqa\s+(.+)$/,
+  role2chara: %{
+    "四国めたん" => {:voicevox_engine, "http://voicevox:50021", 2},
+    "ずんだもん" => {:voicevox_engine, "http://voicevox:50021", 3},
+    "春日部つむぎ" => {:voicevox_engine, "http://voicevox:50021", 8},
+    "雨晴はう" => {:voicevox_engine, "http://voicevox:50021", 10},
+    "波音リツ" => {:voicevox_engine, "http://voicevox:50021", 9},
+    "玄野武宏" => {:voicevox_engine, "http://voicevox:50021", 11},
+    "白上虎太郎" => {:voicevox_engine, "http://voicevox:50021", 12},
+    "青山龍星" => {:voicevox_engine, "http://voicevox:50021", 13},
+    "冥鳴ひまり" => {:voicevox_engine, "http://voicevox:50021", 14},
+    "九州そら" => {:voicevox_engine, "http://voicevox:50021", 16},
+    "モチノ・キョウコ" => {:voicevox_engine, "http://voicevox:50021", 20}
+  },
+  template_text_message: %{
+    summon: fn m -> "#{m.channel_name}に参加します。" end,
+    summon_but_already_joined: fn _ -> "すでにボイスチャネルに参加しています。" end,
+    summon_not_from_vc: fn _ -> "ボイスチャネルに入ってから呼んでください。" end,
+    unsummon: fn _ -> "ボイスチャネルを離れます。" end,
+    unsummon_not_from_same_vc: fn _ -> "同じボイスチャネルから呼んでください。" end,
+    unsummon_not_joined: fn _ -> "まだボイスチャネルに入っていません。" end
+  },
+  template_voice_message: %{
+    i_joined: fn _ -> "こんにちは、daidoquer2です。やさしくしてね。" end,
+    im_leaving: fn _ -> "。お相手はdaidoquer2でした。またね。" end,
+    joined: fn m -> "#{m.name}さんが参加しました。" end,
+    left: fn m -> "#{m.name}さんが離れました。" end,
+    started_live: fn m -> "#{m.name}さんがライブを始めました。" end,
+    stopped_live: fn m -> "#{m.name}さんがライブを終了しました。" end,
+    created_thread: fn m -> "#{m.user_name}さんがスレッド「#{m.thread_name}」を作りました。" end
+  },
+  uid2chara:
+    %{
+      # uid1 => {:post, "http://localhost:8399"},
+      # uid2 => {:google, 0},
+      # uid3 => {:sushikicom, "?speaker=12"},
+      # uid4 => {:voicevox_engine, "http://localhost:50021", 0}
+    }

@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  ddq2:
+    image: anqou/ddq2:0.5.5
+    volumes:
+      - ./config:/app-config
+    restart: always
+  voicevox:
+    image: voicevox/voicevox_engine:cpu-ubuntu20.04-latest
+# voicevox: # using GPU
+#   image: voicevox/voicevox_engine:nvidia-ubuntu20.04-latest
+#   ports:
+#     - "50021:50021"
+#   deploy:
+#     resources:
+#       reservations:
+#         devices:
+#           - capabilities: [gpu]
